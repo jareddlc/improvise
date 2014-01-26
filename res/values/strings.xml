@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="main_name">improvise</string>
+    <string name="menu_launch">Launch</string>
+    <string name="menu_title">Improvise</string><string name="game_name">game</string>
+    <string name="game_title">Get ready!</string>
+    <string name="game_text_record">Record</string>
+    <string name="game_text_playback">Playback</string>
+    <string name="action_settings">Settings</string>
+    
+    <string name="game_text_play">Play</string>
+
+</resources>
