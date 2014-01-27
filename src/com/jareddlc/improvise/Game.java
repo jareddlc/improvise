@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.app.Activity;
 
 import com.jareddlc.improvise.Recorder;
+import com.jareddlc.improvise.Player;
 
 public class Game extends Activity {
 	
@@ -14,6 +15,7 @@ public class Game extends Activity {
 	
 	public boolean recording = false;
 	public boolean playback = false;
+	public boolean playing = false;
 	public Button button_game_play;
 	public Button button_game_record;
     public Button button_game_playback;
@@ -25,6 +27,7 @@ public class Game extends Activity {
 		
 		// Initialize recorder
 		Recorder.main();
+		Player.main();
 		
 		// Buttons
         button_game_play = (Button)findViewById(R.id.button_game_play);
@@ -34,6 +37,7 @@ public class Game extends Activity {
         button_game_play.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d(LOG_D, "play pressed!");
+                play();
             }
         });
         
@@ -51,6 +55,23 @@ public class Game extends Activity {
             }
         });
 	}
+	
+	public void play() {
+        if(playing) {
+        	playing = false;
+        	Log.d(LOG_D, "stop playing");
+        	button_game_play.setText("Play");
+        	Recorder.stopRecording();
+        	Player.stopPlaying();
+        }
+        else {
+        	playing = true;
+        	Log.d(LOG_D, "start playing");
+        	button_game_play.setText("Stop");
+        	Recorder.startRecording();
+        	Player.startPlaying();
+        }
+    }
 	
 	public void record() {
         if(recording) {
@@ -72,13 +93,13 @@ public class Game extends Activity {
         	playback = false;
         	Log.d(LOG_D, "stop playback");
         	button_game_playback.setText("Playback");
-        	//stopPlayback(); 
+        	Player.stopPlaying(); 
         }
         else {
         	playback = true;
         	Log.d(LOG_D, "start playback");
         	button_game_playback.setText("Stop");
-        	//startPlayback();
+        	Player.startPlaying();
         }
     }
 

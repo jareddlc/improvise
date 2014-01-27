@@ -49,10 +49,12 @@ public class Recorder {
         catch(IOException e) {
             Log.e(LOG_D, "recorder.prepare() failed", e);
         }
+        Log.d(LOG_D, "Recorder recording");
         recorder.start();
 	}
 	
 	public static void stopRecording() {
+		Log.d(LOG_D, "Recording stopping");
 		recorder.stop();
 		recorder.release();
 		recorder = null;
