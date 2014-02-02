@@ -48,4 +48,14 @@
         android:layout_centerVertical="true"
         android:text="@string/game_text_play" />
 
+    <TextView
+        android:id="@+id/text_audio_meta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_game_record"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp"
+        android:text=""
+        android:textAlignment="center" />
+
 </RelativeLayout>

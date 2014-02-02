@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.app.Activity;
 
 import com.jareddlc.improvise.Recorder;
@@ -19,6 +20,7 @@ public class Game extends Activity {
 	public Button button_game_play;
 	public Button button_game_record;
     public Button button_game_playback;
+    public TextView text_audio_meta;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +31,11 @@ public class Game extends Activity {
 		Recorder.main();
 		Player.main();
 		
-		// Buttons
+		// Layout
         button_game_play = (Button)findViewById(R.id.button_game_play);
         button_game_record = (Button)findViewById(R.id.button_game_record);
         button_game_playback = (Button)findViewById(R.id.button_game_playback);
+        text_audio_meta = (TextView)findViewById(R.id.text_audio_meta);
         
         button_game_play.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -54,6 +57,21 @@ public class Game extends Activity {
                 playback();
             }
         });
+	}
+	
+	@Override
+	public void onBackPressed() {
+	    Log.d(LOG_D, "backed pressed");
+	    if(playing) {
+	    	play();
+	    }
+	    if(recording) {
+	    	record();
+	    }
+	    if(playback) {
+	    	playback();
+	    }
+	    super.onBackPressed();
 	}
 	
 	public void play() {
@@ -93,13 +111,14 @@ public class Game extends Activity {
         	playback = false;
         	Log.d(LOG_D, "stop playback");
         	button_game_playback.setText("Playback");
-        	Player.stopPlaying(); 
+        	Player.stopPlaying();
         }
         else {
         	playback = true;
         	Log.d(LOG_D, "start playback");
         	button_game_playback.setText("Stop");
         	Player.startPlaying();
+        	text_audio_meta.setText(Player.getMeta());
         }
     }
 
