@@ -17,6 +17,16 @@
         android:layout_marginBottom="35dp"
         android:onClick="launch"
         android:text="@string/menu_launch" />
+    
+    	<Button
+        android:id="@+id/button_menu_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_menu_launch"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:onClick="Select"
+        android:text="@string/menu_select" />
 
     <TextView
         android:id="@+id/text_menu_title"

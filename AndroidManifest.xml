@@ -7,9 +7,10 @@
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="18" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,9 +19,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.jareddlc.improvise.Main"
-            android:label="@string/main_name" 
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize" >
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/main_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,9 +30,15 @@
         </activity>
         <activity
             android:name="com.jareddlc.improvise.Game"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/game_name"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize" >
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.jareddlc.improvise.Select"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/select_name"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

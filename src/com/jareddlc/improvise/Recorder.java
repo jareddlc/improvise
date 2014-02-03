@@ -29,13 +29,13 @@ public class Recorder {
 	public static void startRecording() {
 		// set recording name
 		SimpleDateFormat dFormat = new SimpleDateFormat(dateFormat, Locale.US);
-		fileName = "/Recording_"+dFormat.format(new Date())+".3gp";
+		fileName = "/Recording_"+dFormat.format(new Date())+".m4a";
 		
 		// Create recorder
 		Log.d(LOG_D, "Creating MediaRecorder");
 		recorder = new MediaRecorder();
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-		recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+		recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 		recorder.setOutputFile(fileDirectory.getAbsolutePath()+fileName);
 		recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         //recorder.setAudioEncodingBitRate(96000);
