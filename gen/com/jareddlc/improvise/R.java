@@ -28,19 +28,20 @@ public final class R {
         public static final int button_game_play=0x7f080003;
         public static final int button_game_playback=0x7f080002;
         public static final int button_game_record=0x7f080001;
-        public static final int button_menu_launch=0x7f080005;
-        public static final int button_menu_select=0x7f080006;
-        public static final int list_select_tracks=0x7f080009;
+        public static final int button_menu_launch=0x7f080006;
+        public static final int button_menu_select=0x7f080007;
+        public static final int list_select_tracks=0x7f08000a;
         public static final int text_audio_meta=0x7f080004;
         public static final int text_game_title=0x7f080000;
-        public static final int text_menu_title=0x7f080007;
-        public static final int text_select_list=0x7f08000a;
-        public static final int text_select_title=0x7f080008;
+        public static final int text_menu_title=0x7f080008;
+        public static final int text_select_list=0x7f080005;
+        public static final int text_select_title=0x7f080009;
     }
     public static final class layout {
         public static final int layout_game=0x7f030000;
-        public static final int layout_main=0x7f030001;
-        public static final int layout_select=0x7f030002;
+        public static final int layout_list=0x7f030001;
+        public static final int layout_main=0x7f030002;
+        public static final int layout_select=0x7f030003;
     }
     public static final class menu {
         public static final int game=0x7f070000;
