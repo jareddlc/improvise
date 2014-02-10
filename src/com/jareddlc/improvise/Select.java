@@ -7,6 +7,7 @@ import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,12 +19,16 @@ public class Select extends Activity {
 	
 	private static final String LOG_D = "Improvise:Select";
 	
-	private static File fileDirectory = null;
-	private static File[] files = null;
+	private static File basePath = null;
+	private static File trackPath = null;
+	private static File[] trackFiles = null;
+	private static File recordingPath = null;
 	private static ListView list_select_tracks;
-	private static ArrayList<String> tracks;
-	private static ArrayAdapter<String> adapter;
-	private static MediaMetadataRetriever meta = null;
+	private static ArrayList<String> trackList;
+	private static ArrayAdapter<String> tracksAdapter;
+	private static MediaMetadataRetriever trackMeta = null;
+	private static String selectedTrack = null;
+	private static File selectedTrackFile = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,43 +39,72 @@ public class Select extends Activity {
 		list_select_tracks = (ListView)findViewById(R.id.list_select_tracks);
 
 		// List view
-		tracks = new ArrayList<String>();
-		adapter = new ArrayAdapter<String>(this, R.layout.layout_list, R.id.text_select_list, tracks);
-		list_select_tracks.setAdapter(adapter);
+		trackList = new ArrayList<String>();
+		tracksAdapter = new ArrayAdapter<String>(this, R.layout.layout_list, R.id.text_select_list, trackList);
+		list_select_tracks.setAdapter(tracksAdapter);
 
 		// List view listener
 		list_select_tracks.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Log.d(LOG_D, "Position: "+Integer.toString(position));
-				Log.d(LOG_D, "ID: "+Long.toString(id));
-				Log.d(LOG_D, "Track: "+tracks.get(position));
+				Log.d(LOG_D, "Track: "+trackList.get(position));
+				selectedTrack = trackList.get(position);
+				selectedTrackFile = trackFiles[position];
+				// Launch game
+				launch();
 			}
 		});
-		main();
+		init();
 	}
 	
-	public static void main() {		
+	public static void init() {
 		// File directory
 		Log.d(LOG_D, "Initializing Select");
-		fileDirectory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Improvise/Songs");
-		fileDirectory.mkdirs();
-		files = fileDirectory.listFiles();
+		basePath = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Improvise");
+		trackPath = new File(basePath.getAbsolutePath()+"/Songs");
+		recordingPath = new File(basePath.getAbsolutePath()+"/Recordings");
+		basePath.mkdirs();
+		trackPath.mkdirs();
+		recordingPath.mkdirs();
+		trackFiles = trackPath.listFiles();
 
 		// Iterate over all tracks
-		meta = new MediaMetadataRetriever();
-		for(File file : files) {
+		trackMeta = new MediaMetadataRetriever();
+		for(File file : trackFiles) {
 			Log.d(LOG_D, "File: "+file.getAbsolutePath());
 			// Grab track data and add it to array of tracks
-			meta.setDataSource(file.getAbsolutePath());
-			String artist = meta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-			String title = meta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+			trackMeta.setDataSource(file.getAbsolutePath());
+			String artist = trackMeta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+			String title = trackMeta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
 			String songMeta = artist+" - "+title;
-			tracks.add(songMeta);
+			trackList.add(songMeta);
 	    }
 	}
 	
+	// Launch game
+	public void launch() {
+		Log.d(LOG_D, "launch pressed!");
+		Intent intent = new Intent(this, Game.class);
+		startActivity(intent);
+	}
+	
 	public static File[] getFiles() {
-		return files;
+		return trackFiles;
+	}
+	
+	public static String getSelectedTrack() {
+		return selectedTrack;
+	}
+	
+	public static File getSelectedTrackFile() {
+		return selectedTrackFile;
+	}
+	
+	public static File getRecordingPath() {
+		return recordingPath;
+	}
+	
+	public static MediaMetadataRetriever getTrackMeta() {
+		return trackMeta;
 	}
 }

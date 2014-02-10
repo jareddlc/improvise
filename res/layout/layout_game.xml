@@ -21,41 +21,23 @@
         android:textSize="48sp" />
 
     <Button
-        android:id="@+id/button_game_record"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="80dp"
-        android:layout_marginLeft="60dp"
-        android:text="@string/game_text_record" />
-
-    <Button
-        android:id="@+id/button_game_playback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button_game_record"
-        android:layout_alignBottom="@+id/button_game_record"
-        android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@+id/button_game_record"
-        android:text="@string/game_text_playback" />
-
-    <Button
         android:id="@+id/button_game_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginBottom="35dp"
         android:text="@string/game_text_play" />
 
     <TextView
         android:id="@+id/text_audio_meta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_game_record"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp"
-        android:text=""
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/text_game_title"
+        android:gravity="center"
+        android:textColor="#8e44ad"
+        android:textSize="18sp"
         android:textAlignment="center" />
 
 </RelativeLayout>

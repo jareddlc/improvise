@@ -19,12 +19,6 @@ public class Main extends Activity {
 	// Launch
 	public void launch(View view) {
 		Log.d(LOG_D, "launch pressed!");
-		Intent intent = new Intent(this, Game.class);
-		startActivity(intent);
-	}
-	
-	public void Select(View view) {
-		Log.d(LOG_D, "Select pressed!");
 		Intent intent = new Intent(this, Select.class);
 		startActivity(intent);
 	}

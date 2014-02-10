@@ -18,8 +18,6 @@ public class Game extends Activity {
 	public boolean playback = false;
 	public boolean playing = false;
 	public Button button_game_play;
-	public Button button_game_record;
-    public Button button_game_playback;
     public TextView text_audio_meta;
 
 	@Override
@@ -27,34 +25,15 @@ public class Game extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_game);
 		
-		// Initialize recorder
-		Recorder.main();
-		Player.main();
-		
 		// Layout
         button_game_play = (Button)findViewById(R.id.button_game_play);
-        button_game_record = (Button)findViewById(R.id.button_game_record);
-        button_game_playback = (Button)findViewById(R.id.button_game_playback);
         text_audio_meta = (TextView)findViewById(R.id.text_audio_meta);
+        text_audio_meta.setText(Select.getSelectedTrack());
         
         button_game_play.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d(LOG_D, "play pressed!");
                 play();
-            }
-        });
-        
-        button_game_record.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.d(LOG_D, "record pressed!");
-                record();
-            }
-        });
-
-        button_game_playback.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.d(LOG_D, "playback pressed!");
-                playback();
             }
         });
 	}
@@ -64,12 +43,6 @@ public class Game extends Activity {
 	    Log.d(LOG_D, "backed pressed");
 	    if(playing) {
 	    	play();
-	    }
-	    if(recording) {
-	    	record();
-	    }
-	    if(playback) {
-	    	playback();
 	    }
 	    super.onBackPressed();
 	}
@@ -90,36 +63,4 @@ public class Game extends Activity {
         	Player.startPlaying();
         }
     }
-	
-	public void record() {
-        if(recording) {
-        	recording = false;
-        	Log.d(LOG_D, "stop recording");
-        	button_game_record.setText("Record");
-        	Recorder.stopRecording();
-        }
-        else {
-        	recording = true;
-        	Log.d(LOG_D, "start recording");
-        	button_game_record.setText("Stop");
-        	Recorder.startRecording();
-        }
-    }
-	
-	public void playback() {
-        if(playback) {
-        	playback = false;
-        	Log.d(LOG_D, "stop playback");
-        	button_game_playback.setText("Playback");
-        	Player.stopPlaying();
-        }
-        else {
-        	playback = true;
-        	Log.d(LOG_D, "start playback");
-        	button_game_playback.setText("Stop");
-        	Player.startPlaying();
-        	text_audio_meta.setText(Player.getMeta());
-        }
-    }
-
 }
