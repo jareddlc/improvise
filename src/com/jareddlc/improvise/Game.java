@@ -21,6 +21,7 @@ public class Game extends Activity {
 	public Button button_game_play;
     public TextView text_audio_meta;
     public static TextView text_audio_db;
+    public static TextView text_audio_seek;
     private static Handler handler = null;
 
 	@Override
@@ -34,6 +35,8 @@ public class Game extends Activity {
         text_audio_meta.setText(Select.getSelectedTrack());
         text_audio_db = (TextView)findViewById(R.id.text_audio_db);
         text_audio_db.setText(Recorder.getDecibel().toString());
+        text_audio_seek = (TextView)findViewById(R.id.text_audio_seek);
+        text_audio_seek.setText(Player.getCurrentPosition().toString()+"/"+Player.getDuration().toString());
         
         button_game_play.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -77,6 +80,7 @@ public class Game extends Activity {
 		public void run() {
 			if(playing) {
 				text_audio_db.setText(Recorder.getDecibel().toString());
+				text_audio_seek.setText(Player.getCurrentPosition().toString()+"/"+Player.getDuration().toString());
 				handler.postDelayed(this, 100);
 			}
 		}

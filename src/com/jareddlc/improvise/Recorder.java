@@ -20,7 +20,7 @@ public class Recorder {
 	private static Double dbReference = null;
 	private static Double decibel = 0.0;
 	private static boolean recording = false;
-	private static Handler handler = null;
+	//private static Handler handler = null;
 	
 	public static void startRecording() {
 		// set recording name
@@ -48,8 +48,8 @@ public class Recorder {
         Log.d(LOG_D, "Recorder recording");
         recorder.start();
         recording = true;
-        handler = new Handler();
-        handler.postDelayed(getAmplitude, 100);
+        //handler = new Handler();
+        //handler.postDelayed(getAmplitude, 100);
 	}
 	
 	public static void stopRecording() {
@@ -70,7 +70,7 @@ public class Recorder {
 		Log.d(LOG_D, "decibel: "+decibel);
 	}
 	
-	private static Runnable getAmplitude = new Runnable() {
+	/*private static Runnable getAmplitude = new Runnable() {
 		@Override
 		public void run() {
 			if(recording) {
@@ -78,9 +78,18 @@ public class Recorder {
 				handler.postDelayed(this, 100);
 			}
 		}
-	};
+	};*/
 	
 	public static Double getDecibel() {
+		if(recording) {
+			maxAmplitude = recorder.getMaxAmplitude();
+			Log.d(LOG_D, "maxAmplitude: "+maxAmplitude);
+			Double max = 32767.0;
+			dbReference = (maxAmplitude/max);
+			Log.d(LOG_D, "dbReference: "+dbReference);	
+			decibel = (20 * Math.log10(dbReference));
+			Log.d(LOG_D, "decibel: "+decibel);
+		}
 		return decibel;
 	}
 	

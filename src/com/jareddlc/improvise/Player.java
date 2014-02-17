@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.media.MediaPlayer;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.util.Log;
 
 import com.jareddlc.improvise.Select;
@@ -15,6 +16,7 @@ public class Player {
 	private static MediaPlayer player = null;
 	private static MediaMetadataRetriever trackMeta = null;
 	private static String meta = null;
+	private static boolean playing = false;
 	
 	public static void startPlaying() {
 		// Create player
@@ -23,24 +25,32 @@ public class Player {
 		trackMeta = new MediaMetadataRetriever();
         try {
         	Log.d(LOG_D, "Trying to play file: "+Select.getSelectedTrack());
-        	//player.setDataSource(fileDirectory.getAbsolutePath()+fileName);
         	player.setDataSource(Select.getSelectedTrackFile().getAbsolutePath());
         	player.prepare();
-        	//meta.setDataSource(fileDirectory.getAbsolutePath()+fileName);
         	trackMeta.setDataSource(Select.getSelectedTrackFile().getAbsolutePath());
         	Log.d(LOG_D, "Duration: "+trackMeta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
         	Log.d(LOG_D, "Title: "+trackMeta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
         	Log.d(LOG_D, "Artist: "+trackMeta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
         	Log.d(LOG_D, "Player playing");
         	player.start();
-        } catch (IOException e) {
+        	playing = true;
+        } 
+        catch (IOException e) {
         	Log.e(LOG_D, "player.prepare() failed", e);
-        }
+        }  
+        player.setOnCompletionListener(new OnCompletionListener() {
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				Log.d(LOG_D, "Player completed.");
+				//stopPlaying();
+			}
+        });
     }
 	public static void stopPlaying() {
 		Log.d(LOG_D, "Player stopping");
 		player.release();
 		player = null;
+		playing = false;
 		trackMeta.release();
 		trackMeta = null;
     }
@@ -50,5 +60,23 @@ public class Player {
 		String title = trackMeta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
 		meta = artist+" - "+title;
 		return meta;
+	}
+	
+	public static Integer getDuration() {
+		if(playing) {
+			return player.getDuration();
+		}
+		else {
+			return 0;
+		}
+	}
+	
+	public static Integer getCurrentPosition() {
+		if(playing) {
+			return player.getCurrentPosition();
+		}
+		else {
+			return 0;
+		}
 	}
 }
