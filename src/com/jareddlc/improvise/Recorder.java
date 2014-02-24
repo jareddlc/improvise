@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.media.MediaRecorder;
-import android.os.Handler;
 import android.util.Log;
 
 public class Recorder {
@@ -83,12 +82,12 @@ public class Recorder {
 	public static Double getDecibel() {
 		if(recording) {
 			maxAmplitude = recorder.getMaxAmplitude();
-			Log.d(LOG_D, "maxAmplitude: "+maxAmplitude);
 			Double max = 32767.0;
 			dbReference = (maxAmplitude/max);
-			Log.d(LOG_D, "dbReference: "+dbReference);	
 			decibel = (20 * Math.log10(dbReference));
-			Log.d(LOG_D, "decibel: "+decibel);
+			//Log.d(LOG_D, "maxAmplitude: "+maxAmplitude);
+			//Log.d(LOG_D, "dbReference: "+dbReference);
+			//Log.d(LOG_D, "decibel: "+decibel);
 		}
 		return decibel;
 	}
