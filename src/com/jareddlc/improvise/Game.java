@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 
 import com.jareddlc.improvise.Recorder;
 import com.jareddlc.improvise.Player;
+import com.jareddlc.improvise.Server;
 
 public class Game extends Activity {
 	
@@ -105,6 +106,7 @@ public class Game extends Activity {
 		play();
 		String message = intent.getStringExtra("message");
 		Log.d(LOG_D, "Recieved message: " + message);
+		Server.getURL();
 		}
 	};
 }
