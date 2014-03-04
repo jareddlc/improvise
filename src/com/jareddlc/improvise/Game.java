@@ -102,11 +102,11 @@ public class Game extends Activity {
 	private BroadcastReceiver bReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-		// stop the player
-		play();
-		String message = intent.getStringExtra("message");
-		Log.d(LOG_D, "Recieved message: " + message);
-		Server.getURL();
+			// stop the player
+			play();
+			String message = intent.getStringExtra("message");
+			Log.d(LOG_D, "Recieved message: " + message);
+			Server.postURL();
 		}
 	};
 }

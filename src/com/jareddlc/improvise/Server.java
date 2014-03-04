@@ -1,5 +1,9 @@
 package com.jareddlc.improvise;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,6 +22,9 @@ public class Server {
 	private static final String LOG_D = "Improvise:Server";
 	public static String serverURL = "http://192.168.1.130";
 	public static String serverPort = "3000";
+	public static String uploadPath = "/upload";
+	public static String hyphens = "--";
+	public static String newLine = "\r\n";
 	public static Integer responseCode = null;
 	public static Integer timeoutRead = 10000;
 	public static Integer timeoutConx = 15000;
@@ -36,6 +43,11 @@ public class Server {
         }*/
 		Log.d(LOG_D, "About to spawn async");
 		new ServerGetTask().execute("tempURL");
+	}
+	
+	public static void postURL() {
+		Log.d(LOG_D, "About to spawn async");
+		new ServerPostTask().execute("tempURL");
 	}
 	
 	public static String get(String getURL) throws IOException {
@@ -78,6 +90,30 @@ public class Server {
 	    return new String(buffer);
 	}
 	
+	private static String convertStream(InputStream stream) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuilder sb = new StringBuilder();
+
+        String line = null;
+        try {
+			while((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+        } 
+        catch (IOException e) {
+        	Log.d(LOG_D, "Error: "+e);
+        } 
+        finally {
+            try {
+            	stream.close();
+            }
+            catch (IOException e) {
+            	Log.d(LOG_D, "Error: "+e);
+            }
+        }
+        return sb.toString();
+	}
+	
 	public static class ServerGetTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -86,6 +122,93 @@ public class Server {
             } catch (IOException e) {
             	Log.d(LOG_D, "Error: ", e);
                 return "Unable to retrieve web page. URL may be invalid.";
+            }
+        }
+        @Override
+        protected void onPostExecute(String result) {
+        	Log.d(LOG_D, "The result is: "+result);
+       }
+    }
+	
+	public static String post(File postFile) throws IOException {
+		InputStream inStream = null;
+		DataOutputStream outStream = null;
+		String boundary = "==="+System.currentTimeMillis()+"===";
+		
+	    try {
+	    	// setup connection
+	        URL url = new URL(serverURL+":"+serverPort+uploadPath);
+	        Log.d(LOG_D, "Url: "+url.toString());
+	        HttpURLConnection conx = (HttpURLConnection) url.openConnection();
+	        conx.setRequestMethod("POST");
+	        conx.setDoInput(true);
+	        conx.setDoOutput(true);
+	        conx.setRequestProperty("Connection", "Keep-Alive");
+	        conx.setRequestProperty("Content-Type", "multipart/form-data; boundary="+boundary);
+	        
+	        // setup output stream
+	        outStream = new DataOutputStream(conx.getOutputStream());
+	        outStream.writeBytes(hyphens+boundary+newLine);
+	        outStream.writeBytes("Content-Disposition: form-data; name=\"fileUpload\"; filename=\""+postFile.getName()+"\""+newLine);
+	        outStream.writeBytes("Content-Type: audio/mp4"+newLine);
+	        outStream.writeBytes("Content-Transfer-Encoding: binary"+newLine);
+	        outStream.writeBytes(newLine);
+	        
+	        // bytes stuff
+	        int bytesRead, bytesAvailable, bufferSize;
+	        byte[] buffer;
+	        int maxBufferSize = 1*1024*1024;
+
+	        FileInputStream fileInStream = new FileInputStream(postFile);
+	        bytesAvailable = fileInStream.available();
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+            
+            bytesRead = fileInStream.read(buffer, 0, bufferSize);
+            while(bytesRead > 0) {
+            	outStream.write(buffer, 0, bufferSize);
+                bytesAvailable = fileInStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = fileInStream.read(buffer, 0, bufferSize);
+            }
+            outStream.writeBytes(newLine);
+
+            // upload data
+            outStream.writeBytes(hyphens+boundary+newLine);
+            outStream.writeBytes("Content-Disposition: form-data; name=\"fileUpload\""+newLine);
+            outStream.writeBytes("Content-Type: text/plain"+newLine);
+            outStream.writeBytes(newLine);
+            outStream.writeBytes("androidUpload");
+            outStream.writeBytes(newLine);
+            
+            outStream.writeBytes(hyphens+boundary+hyphens+newLine);
+            
+            inStream = conx.getInputStream();
+            String result = convertStream(inStream);
+            
+            responseCode = conx.getResponseCode();
+	        Log.d(LOG_D, "The response is: "+responseCode);
+            
+            fileInStream.close();
+            inStream.close();
+            outStream.flush();
+            outStream.close();
+            
+            return result;
+	    }
+	    finally {
+	        Log.d(LOG_D, "finally");
+	    }
+	}
+	
+	public static class ServerPostTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                return Server.post(Recorder.getRecordedFile());
+            } catch (IOException e) {
+            	Log.d(LOG_D, "Error: ", e);
+                return "Unable to post to web page. URL may be invalid.";
             }
         }
         @Override

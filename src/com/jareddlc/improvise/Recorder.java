@@ -1,5 +1,6 @@
 package com.jareddlc.improvise;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +20,7 @@ public class Recorder {
 	private static Double dbReference = null;
 	private static Double decibel = 0.0;
 	private static boolean recording = false;
+	private static File recordedFile = null;
 	//private static Handler handler = null;
 	
 	public static void startRecording() {
@@ -57,7 +59,12 @@ public class Recorder {
 		recorder.release();
 		recorder = null;
 		recording = false;
+		recordedFile = new File(Select.getRecordingPath().getAbsolutePath()+fileName);
     }
+	
+	public static File getRecordedFile() {
+		return recordedFile;
+	}
 	
 	public static void updateAmplitude() {
 		maxAmplitude = recorder.getMaxAmplitude();
